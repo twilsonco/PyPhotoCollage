@@ -1,7 +1,7 @@
 '''
 Created on May 24, 2020
 
-@author: Tim Wilson twilsonco @t gmail d.t com
+@author: Tim Wilson
 '''
 import dialogs
 import photos
@@ -235,4 +235,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-    pass

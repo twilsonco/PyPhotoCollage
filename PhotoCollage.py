@@ -1,7 +1,7 @@
 '''
 Created on May 24, 2020
 
-@author: Tim Wilson twilsonco @t gmail d.t com
+@author: Tim Wilson
 '''
 import re
 import argparse
@@ -12,8 +12,12 @@ from PIL.ExifTags import TAGS
 from PIL import ImageOps
 from PIL import Image
 
+# got idea from https://medium.com/@jtreitz/the-algorithm-for-a-perfectly-balanced-photo-gallery-914c94a5d8af
+
+
 # start partition problem algorithm from https://stackoverflow.com/a/7942946
 # modified to act on list of images rather than the weights themselves
+# more info on the partition problem http://www8.cs.umu.se/kurser/TDBAfl/VT06/algorithms/BOOK/BOOK2/NODE45.HTM
 
 from operator import itemgetter
 
@@ -213,17 +217,7 @@ def main():
     collage.save(args.output)
     
     print('Collage is ready!')
-    
-#     res = make_collage(images, args.output, args.width,
-#                        args.init_height,  args.width, args.height)
-#     if not res:
-#         print('Failed to create collage!')
-#         exit(1)
-#     print('Collage is ready!')
 
 
 if __name__ == '__main__':
-#     a = linear_partition([1,2,3,4,5,6,7,8,9], 3)
-#     print("done")
     main()
-    pass

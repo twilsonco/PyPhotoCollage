@@ -126,7 +126,7 @@ def main():
     while userExit <= 1:
         # get images
         pilImages = []
-        images = photos.pick_asset(title='Select images for collage', multi=True)
+        images = photos.pick_asset(title='Select images for collage', assets=photos.get_assets(), multi=True)
         if images is None:
             return
         
@@ -190,16 +190,12 @@ def main():
                 args['width'] = max([int(args['width']), 0]) if 'width' in args else 5000
                 args['height'] = max([int(args['height']), 0]) if 'height' in args else 5000
                 args['initheight'] = max([int(args['initheight']), 0]) if 'initheight' in args else 500
-                args['aspectratiofactor'] = clamp(float(args['aspectratiofactor']), 0.05, 20) if 'aspectratiofactor' in args else 0
+                args['aspectratiofactor'] = float(clamp(float(args['aspectratiofactor']), 0.05, 20.0)) if 'aspectratiofactor' in args else 1.0
+                args['shuffle'] = True if args['shuffle'] == 'True' else False
+                args['noantialias'] = True if args['noantialias'] == 'True' else False
             except:
                 userExit = dialogs.alert(title='Photo Collage', message='There was one or more input errors. Check that your input values make sense and try again', button1='OK',button3='Quit',hide_cancel_button=True)
                 continue
-                    
-                
-            
-            # shuffle images if needed
-            if args['shuffle']:
-                random.shuffle(images)
                 
             # get PIL image objects for all the photos
             if userExit <= 1 or len(pilImages) != len(images):
@@ -214,7 +210,10 @@ def main():
                             pilImages.append(img.resize((int(img.width / img.height * args['initheight']), args['initheight']), Image.ANTIALIAS))
                     else:
                         pilImages.append(img)
-        
+            
+            # shuffle images if needed
+            if args['shuffle']:
+                random.shuffle(pilImages)
                 
             print('Making collage...')
             

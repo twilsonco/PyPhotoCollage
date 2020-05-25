@@ -7,8 +7,17 @@ After looking around, the idea for this tool came from [Johannes Treitz's](https
 The problem is reduced to the [partition problem](http://www8.cs.umu.se/kurser/TDBAfl/VT06/algorithms/BOOK/BOOK2/NODE45.HTM), for which I used [this SO implementation](https://stackoverflow.com/a/7942946).
 
 Some example collages from the same set of images with varying options:
-| ![ex1](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%201.PNG) | ![ex2](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%202.PNG) |
-| ![ex3](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%203.PNG) | ![ex4](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%204.PNG) |
+Default options:
+![ex1](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%201.PNG)
+
+With padding:
+![ex2](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%202.PNG)
+
+Scale aspect ratio to 2.0:
+![ex3](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%203.PNG)
+
+Scale aspect ratio to 0.5:
+![ex4](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%204.PNG)
 
 
 Options for the CLI version:

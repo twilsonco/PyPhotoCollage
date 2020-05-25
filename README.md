@@ -7,6 +7,7 @@ After looking around, the idea for this tool came from [Johannes Treitz's](https
 The problem is reduced to the [partition problem](http://www8.cs.umu.se/kurser/TDBAfl/VT06/algorithms/BOOK/BOOK2/NODE45.HTM), for which I used [this SO implementation](https://stackoverflow.com/a/7942946).
 
 Some example collages from the same set of images with varying options:
+
 Default options:
 ![ex1](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%201.PNG)
 

@@ -57,15 +57,19 @@ If you want to run it from _e.g._ iOS Shortcuts, you'll need to store it locally
 
 ## Some example collages from the same set of images with varying options:
 
-Default options:
+### Default options:
+
 ![ex1](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%201.PNG)
 
-With padding:
+### With padding:
+
 ![ex2](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%202.PNG)
 
-Scale aspect ratio to 2.0:
+### Scale aspect ratio to 2.0:
+
 ![ex3](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%203.PNG)
 
-Scale aspect ratio to 0.5:
+### Scale aspect ratio to 0.5:
+
 ![ex4](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%204.PNG)
 

@@ -61,7 +61,7 @@ If you want to run it from _e.g._ iOS Shortcuts, you'll need to store it locally
 
 ![ex1](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%201.PNG)
 
-### With padding:
+### With (transparent) padding:
 
 ![ex2](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%202.PNG)
 

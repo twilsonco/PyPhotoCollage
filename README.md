@@ -45,7 +45,15 @@ optional arguments:
   -a, --no-antialias-when-resizing
                         disable antialiasing on intermediate resizing of
                         images (runs faster but output image looks worse;
-                        final resize is always antialiased)```
+                        final resize is always antialiased)
+```
+
+## [Pythonista](http://omz-software.com/pythonista/) version
+
+Takes no arguments.
+Options are specified by the user when run.
+Simply place in the app, locally or though iCloud.
+If you want to run it from _e.g._ iOS Shortcuts, you'll need to store it locally.
 
 ## Some example collages from the same set of images with varying options:
 

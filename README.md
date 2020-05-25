@@ -55,7 +55,7 @@ Options are specified by the user when run.
 Simply place in the app, locally or though iCloud.
 If you want to run it from _e.g._ iOS Shortcuts, you'll need to store it locally.
 
-## Some example collages from the same set of images with varying options:
+## Some example collages from the same set of images with varying options (shuffle disabled for easier comparison between examples):
 
 ### Default options:
 

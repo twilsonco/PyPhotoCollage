@@ -5,6 +5,7 @@ Dissatisfied with the iOS Shortcuts image gridding capability, I wanted a photo 
 
 After looking around, the idea for this tool came from [Johannes Treitz's](https://medium.com/@jtreitz) [blog post](https://medium.com/@jtreitz/the-algorithm-for-a-perfectly-balanced-photo-gallery-914c94a5d8af).
 The problem is reduced to the [partition problem](http://www8.cs.umu.se/kurser/TDBAfl/VT06/algorithms/BOOK/BOOK2/NODE45.HTM), for which I used [this SO implementation](https://stackoverflow.com/a/7942946).
+Main function was modified (significantly) from [delimitry's _collage_maker_](https://github.com/delimitry/collage_maker).
 
 ## Options for the CLI version:
 ```

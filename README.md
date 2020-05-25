@@ -6,22 +6,7 @@ Dissatisfied with the iOS Shortcuts image gridding capability, I wanted a photo 
 After looking around, the idea for this tool came from [Johannes Treitz's](https://medium.com/@jtreitz) [blog post](https://medium.com/@jtreitz/the-algorithm-for-a-perfectly-balanced-photo-gallery-914c94a5d8af).
 The problem is reduced to the [partition problem](http://www8.cs.umu.se/kurser/TDBAfl/VT06/algorithms/BOOK/BOOK2/NODE45.HTM), for which I used [this SO implementation](https://stackoverflow.com/a/7942946).
 
-Some example collages from the same set of images with varying options:
-
-Default options:
-![ex1](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%201.PNG)
-
-With padding:
-![ex2](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%202.PNG)
-
-Scale aspect ratio to 2.0:
-![ex3](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%203.PNG)
-
-Scale aspect ratio to 0.5:
-![ex4](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%204.PNG)
-
-
-Options for the CLI version:
+## Options for the CLI version:
 ```usage: PhotoCollage.py [-h] [-f FOLDER] [-F FILE] [-o OUTPUT] [-W WIDTH]
                        [-H HEIGHT] [-i INITHEIGHT] [-s] [-g IMAGEGAP]
                        [-b BACKGROUND] [-c COUNT] [-r ASPECTRATIOFACTOR] [-a]
@@ -61,3 +46,18 @@ optional arguments:
                         disable antialiasing on intermediate resizing of
                         images (runs faster but output image looks worse;
                         final resize is always antialiased)```
+
+## Some example collages from the same set of images with varying options:
+
+Default options:
+![ex1](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%201.PNG)
+
+With padding:
+![ex2](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%202.PNG)
+
+Scale aspect ratio to 2.0:
+![ex3](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%203.PNG)
+
+Scale aspect ratio to 0.5:
+![ex4](https://github.com/twilsonco/PyPhotoCollage/blob/master/example%204.PNG)
+

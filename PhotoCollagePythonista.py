@@ -169,21 +169,12 @@ def main():
                          'key':'aspectratiofactor',
                          'type':'number',
                          'value':'1.0'},
-        #                 {'title':'Background color***:   ',
-        #                  'key':'background',
-        #                  'type':'text',
-        #                  'value':'0,0,0'},
                         {'title':'Disable intermediate antialiasing***:   ',
                          'key':'noantialias',
                          'type':'check',
                          'value':'True'}],
                         '*lower values run faster and use less memory; **scaling mean image AR; ***final resize is always antialiased'
                     )])
-        #         try:
-        #             args['background'] = (0 if v < 0 else 255 if v > 255 else v for v in map(int, args['background'].split(',')))
-        #             break
-        #         except:
-        #             dialogs.alert(title='Error', message='Background must be (r,g,b) --> "(0,0,0)" to "(255,255,255)"') 
                             
             try:
                 args['imagegap'] = clamp(int(args['imagegap']), 0, 1000) if 'imagegap' in args else 0

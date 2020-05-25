@@ -7,6 +7,11 @@ After looking around, the idea for this tool came from [Johannes Treitz's](https
 The problem is reduced to the [partition problem](http://www8.cs.umu.se/kurser/TDBAfl/VT06/algorithms/BOOK/BOOK2/NODE45.HTM), for which I used [this SO implementation](https://stackoverflow.com/a/7942946).
 Main function was modified (significantly) from [delimitry's _collage_maker_](https://github.com/delimitry/collage_maker).
 
+## Requirements
+
+* Python3
+* PIL (Pillow)
+
 ## Options for the CLI version:
 ```
 usage: PhotoCollage.py [-h] [-f FOLDER] [-F FILE] [-o OUTPUT] [-W WIDTH]

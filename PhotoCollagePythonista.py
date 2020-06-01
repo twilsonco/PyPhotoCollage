@@ -73,16 +73,15 @@ def clamp(v,l,h):
 def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), aspectratiofactor = 1.0):
     # first downscale all images according to the minimum height of any image
     minHeight = min([img.height for img in imgList])
-    totalWidth = sum([img.width for img in imgList])
     if antialias:
-        imgList = [img.resize((int(img.width * img.height / minHeight),minHeight), Image.ANTIALIAS) if img.height > minHeight else img for img in imgList]
+        imgList = [img.resize((int(img.width / img.height * minHeight),minHeight), Image.ANTIALIAS) if img.height > minHeight else img for img in imgList]
     else:
-        imgList = [img.resize((int(img.width * img.height / minHeight),minHeight)) if img.height > minHeight else img for img in imgList]
-    
+        imgList = [img.resize((int(img.width / img.height * minHeight),minHeight)) if img.height > minHeight else img for img in imgList]
+        
     # generate the input for the partition problem algorithm
     # need list of aspect ratios and number of rows (partitions)
     imgHeights = [img.height for img in imgList]
-    totalWidth = sum([img.height for img in imgList])
+    totalWidth = sum([img.width for img in imgList])
     avgWidth = totalWidth / len(imgList)
     targetWidth = avgWidth * math.sqrt(len(imgList) * aspectratiofactor)
     

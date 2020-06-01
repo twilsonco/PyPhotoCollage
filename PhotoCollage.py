@@ -65,33 +65,37 @@ def clamp(v,l,h):
 def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), aspectratiofactor = 1.0):
     # first downscale all images according to the minimum height of any image
     minHeight = min([img.height for img in imgList])
-    totalWidth = sum([img.width for img in imgList])
     if antialias:
-        imgList = [img.resize((int(img.width * img.height / minHeight),minHeight), Image.ANTIALIAS) if img.height > minHeight else img for img in imgList]
+        imgList = [img.resize((int(img.width / img.height * minHeight),minHeight), Image.ANTIALIAS) if img.height > minHeight else img for img in imgList]
     else:
-        imgList = [img.resize((int(img.width * img.height / minHeight),minHeight)) if img.height > minHeight else img for img in imgList]
+        imgList = [img.resize((int(img.width / img.height * minHeight),minHeight)) if img.height > minHeight else img for img in imgList]
     
     # generate the input for the partition problem algorithm
     # need list of aspect ratios and number of rows (partitions)
     imgHeights = [img.height for img in imgList]
-    totalWidth = sum([img.height for img in imgList])
+    totalWidth = sum([img.width for img in imgList])
     avgWidth = totalWidth / len(imgList)
     targetWidth = avgWidth * math.sqrt(len(imgList) * aspectratiofactor)
     
-    numRows = int(round(totalWidth / targetWidth))
-    aspectRatios = [int(img.width / img.height * 100) for img in imgList]
-    
-    # get nested list of images (each sublist is a row in the collage)
-    imgRows = linear_partition(aspectRatios, numRows, imgList)
-    
-    # scale down larger rows to match the minimum row width
-    rowWidths = [sum([img.width + spacing for img in row]) - spacing for row in imgRows]
-    minRowWidth = min(rowWidths)
-    rowWidthRatios = [minRowWidth / w for w in rowWidths]
-    if antialias:
-        imgRows = [[img.resize((int(img.width * widthRatio), int(img.height * widthRatio)), Image.ANTIALIAS) for img in row] for row,widthRatio in zip(imgRows, rowWidthRatios)]
+    numRows = clamp(int(round(totalWidth / targetWidth)), 1, len(imgList))
+    if numRows == 1:
+        imgRows = [imgList]
+    elif numRows == len(imgList):
+        imgRows = [[img] for img in imgList]
     else:
-        imgRows = [[img.resize((int(img.width * widthRatio), int(img.height * widthRatio))) for img in row] for row,widthRatio in zip(imgRows, rowWidthRatios)]
+        aspectRatios = [int(img.width / img.height * 100) for img in imgList]
+    
+        # get nested list of images (each sublist is a row in the collage)
+        imgRows = linear_partition(aspectRatios, numRows, imgList)
+    
+        # scale down larger rows to match the minimum row width
+        rowWidths = [sum([img.width + spacing for img in row]) - spacing for row in imgRows]
+        minRowWidth = min(rowWidths)
+        rowWidthRatios = [minRowWidth / w for w in rowWidths]
+        if antialias:
+            imgRows = [[img.resize((int(img.width * widthRatio), int(img.height * widthRatio)), Image.ANTIALIAS) for img in row] for row,widthRatio in zip(imgRows, rowWidthRatios)]
+        else:
+            imgRows = [[img.resize((int(img.width * widthRatio), int(img.height * widthRatio))) for img in row] for row,widthRatio in zip(imgRows, rowWidthRatios)]
     
     # pupulate new image
     rowWidths = [sum([img.width + spacing for img in row]) - spacing for row in imgRows]

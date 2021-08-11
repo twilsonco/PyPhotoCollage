@@ -64,11 +64,18 @@ def clamp(v,l,h):
 # takes list of PIL image objects and returns the collage as a PIL image object
 def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), aspectratiofactor = 1.0):
     # first downscale all images according to the minimum height of any image
-    minHeight = min([img.height for img in imgList])
+#     minHeight = min([img.height for img in imgList])
+#     if antialias:
+#         imgList = [img.resize((int(img.width / img.height * minHeight),minHeight), Image.ANTIALIAS) if img.height > minHeight else img for img in imgList]
+#     else:
+#         imgList = [img.resize((int(img.width / img.height * minHeight),minHeight)) if img.height > minHeight else img for img in imgList]
+        
+    # first upscale all images according to the maximum height of any image (downscaling would result in a terrible quality image if a very short image was included in the batch)
+    maxHeight = max([img.height for img in imgList])
     if antialias:
-        imgList = [img.resize((int(img.width / img.height * minHeight),minHeight), Image.ANTIALIAS) if img.height > minHeight else img for img in imgList]
+        imgList = [img.resize((int(img.width / img.height * maxHeight),maxHeight), Image.ANTIALIAS) if img.height < maxHeight else img for img in imgList]
     else:
-        imgList = [img.resize((int(img.width / img.height * minHeight),minHeight)) if img.height > minHeight else img for img in imgList]
+        imgList = [img.resize((int(img.width / img.height * maxHeight),maxHeight)) if img.height < maxHeight else img for img in imgList]
     
     # generate the input for the partition problem algorithm
     # need list of aspect ratios and number of rows (partitions)

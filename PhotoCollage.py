@@ -133,7 +133,7 @@ def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), asp
 def main():
     def rgb(s):
         try:
-            rgb = (0 if v < 0 else 255 if v > 255 else v for v in map(int, s.split(',')))
+            rgb = tuple(0 if v < 0 else 255 if v > 255 else v for v in map(int, s.split(',')))
             return rgb
         except:
             raise argparse.ArgumentTypeError('Background must be (r,g,b) --> "(0,0,0)" to "(255,255,255)"')

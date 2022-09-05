@@ -62,7 +62,7 @@ def clamp(v,l,h):
     return l if v < l else h if v > h else v
 
 # takes list of PIL image objects and returns the collage as a PIL image object
-def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), aspectratiofactor = 1.0):
+def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), aspectratiofactor = 1.0, imageMode='RGBA'):
     # first downscale all images according to the minimum height of any image
 #     minHeight = min([img.height for img in imgList])
 #     if antialias:
@@ -114,7 +114,8 @@ def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), asp
         background += tuple([0])
     else:
         background += tuple([255])
-    outImg = Image.new("RGBA", (w,h), background)
+
+    outImg = Image.new(imageMode, (w,h), background)
     xPos,yPos = (0,0)
     
     for row in imgRows:
@@ -219,10 +220,11 @@ def main():
         else:
             pilImages.append(img)
 
-        
+    imageMode = "RGBA" if re.search('png', args.output.split('.')[-1], re.IGNORECASE) else "RGB"    
+
     print('Making collage...')
     
-    collage = makeCollage(pilImages, args.imagegap, not args.noantialias, args.background, args.aspectratiofactor)
+    collage = makeCollage(pilImages, args.imagegap, not args.noantialias, args.background, args.aspectratiofactor, imageMode)
     
     if args.width > 0 and collage.width > args.width:
         collage = collage.resize((args.width, int(collage.height / collage.width * args.width)), Image.ANTIALIAS)

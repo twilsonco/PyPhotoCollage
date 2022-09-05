@@ -139,6 +139,7 @@ def main():
             raise argparse.ArgumentTypeError('Background must be (r,g,b) --> "(0,0,0)" to "(255,255,255)"')
     parse = argparse.ArgumentParser(description='Photo collage maker')
     parse.add_argument('-f', '--folder', dest='folder', help='folder with images (*.jpg, *.jpeg, *.png)', default=False)
+    parse.add_argument('-R', '--recursive', action='store_true', dest='recursive', help='look for the images in subfolders (FALSE by default)')
     parse.add_argument('-F', '--file', dest='file', help='file with newline separated list of files', default=False)
     parse.add_argument('-o', '--output', dest='output', help='output collage image filename', default='collage.png')
     parse.add_argument('-W', '--width', dest='width', type=int, help='resulting collage image height (mutually exclusive with --height)', default=5000)
@@ -167,12 +168,17 @@ def main():
                 images.append(line.strip())
     elif args.folder:
         images = []
-        for root, dirs, files in os.walk(args.folder):
-            for name in files:
+        if args.recursive:
+            for root, dirs, files in os.walk(args.folder):
+                for name in files:
+                    if re.findall("jpg|png|jpeg", name.split(".")[-1]):
+                        fname = os.path.join(root, name)
+                        images.append(fname)
+        else:
+            for name in os.listdir(args.folder):
                 if re.findall("jpg|png|jpeg", name.split(".")[-1]):
-                    fname = os.path.join(root, name)
+                    fname = os.path.join(args.folder, name)
                     images.append(fname)
-    
     if len(images) < 3:
         print("Need to use 3 or more images. Try again")
         return

@@ -66,14 +66,14 @@ def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), asp
     # first downscale all images according to the minimum height of any image
 #     minHeight = min([img.height for img in imgList])
 #     if antialias:
-#         imgList = [img.resize((int(img.width / img.height * minHeight),minHeight), Image.ANTIALIAS) if img.height > minHeight else img for img in imgList]
+#         imgList = [img.resize((int(img.width / img.height * minHeight),minHeight), Image.LANCZOS) if img.height > minHeight else img for img in imgList]
 #     else:
 #         imgList = [img.resize((int(img.width / img.height * minHeight),minHeight)) if img.height > minHeight else img for img in imgList]
         
     # first upscale all images according to the maximum height of any image (downscaling would result in a terrible quality image if a very short image was included in the batch)
     maxHeight = max([img.height for img in imgList])
     if antialias:
-        imgList = [img.resize((int(img.width / img.height * maxHeight),maxHeight), Image.ANTIALIAS) if img.height < maxHeight else img for img in imgList]
+        imgList = [img.resize((int(img.width / img.height * maxHeight),maxHeight), Image.LANCZOS) if img.height < maxHeight else img for img in imgList]
     else:
         imgList = [img.resize((int(img.width / img.height * maxHeight),maxHeight)) if img.height < maxHeight else img for img in imgList]
     
@@ -100,7 +100,7 @@ def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), asp
         minRowWidth = min(rowWidths)
         rowWidthRatios = [minRowWidth / w for w in rowWidths]
         if antialias:
-            imgRows = [[img.resize((int(img.width * widthRatio), int(img.height * widthRatio)), Image.ANTIALIAS) for img in row] for row,widthRatio in zip(imgRows, rowWidthRatios)]
+            imgRows = [[img.resize((int(img.width * widthRatio), int(img.height * widthRatio)), Image.LANCZOS) for img in row] for row,widthRatio in zip(imgRows, rowWidthRatios)]
         else:
             imgRows = [[img.resize((int(img.width * widthRatio), int(img.height * widthRatio))) for img in row] for row,widthRatio in zip(imgRows, rowWidthRatios)]
     
@@ -209,7 +209,7 @@ def main():
             if args.noantialias:
                 pilImages.append(img.resize((int(img.width / img.height * args.initheight),args.initheight)))
             else:
-                pilImages.append(img.resize((int(img.width / img.height * args.initheight),args.initheight), Image.ANTIALIAS))
+                pilImages.append(img.resize((int(img.width / img.height * args.initheight),args.initheight), Image.LANCZOS))
         else:
             pilImages.append(img)
 
@@ -219,10 +219,10 @@ def main():
     collage = makeCollage(pilImages, args.imagegap, not args.noantialias, args.background, args.aspectratiofactor)
     
     if args.width > 0 and collage.width > args.width:
-        collage = collage.resize((args.width, int(collage.height / collage.width * args.width)), Image.ANTIALIAS)
+        collage = collage.resize((args.width, int(collage.height / collage.width * args.width)), Image.LANCZOS)
         pass
     elif args.height > 0 and collage.height > args.height:
-        collage = collage.resize((int(collage.width / collage.height * args.height), args.height), Image.ANTIALIAS)
+        collage = collage.resize((int(collage.width / collage.height * args.height), args.height), Image.LANCZOS)
         pass
     
     collage.save(args.output)

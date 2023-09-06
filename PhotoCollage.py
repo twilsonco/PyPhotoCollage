@@ -150,15 +150,18 @@ def main():
     parse.add_argument('-c', '--count', dest='count', type=int, help='count of images to use', default=0)
     parse.add_argument('-r', '--scale-aspect-ratio', dest='aspectratiofactor', type=float, help='aspect ratio scaling factor, multiplied by the average aspect ratio of the input images to determine the output aspect ratio', default=1.0)
     parse.add_argument('-a', '--no-antialias-when-resizing', dest='noantialias', action='store_false', help='disable antialiasing on intermediate resizing of images (runs faster but output image looks worse; final resize is always antialiased)')
+    parse.add_argument('files', nargs='*')
 
     args = parse.parse_args()
-    if not args.file and not args.folder:
+    if not args.file and not args.folder and not args.files:
         parse.print_help()
         exit(1)
 
     # get images
-    files = [os.path.join(args.folder, fn) for fn in os.listdir(args.folder)]
-    images = [fn for fn in files if os.path.splitext(fn)[1].lower() in ('.jpg', '.jpeg', '.png')]
+    images = args.files
+    if args.folder:
+        files = [os.path.join(args.folder, fn) for fn in os.listdir(args.folder)]
+        images = [fn for fn in files if os.path.splitext(fn)[1].lower() in ('.jpg', '.jpeg', '.png')]
     
     if args.file:
         images = []
@@ -225,9 +228,12 @@ def main():
         collage = collage.resize((int(collage.width / collage.height * args.height), args.height), Image.LANCZOS)
         pass
     
-    collage.save(args.output)
+    output = args.output
+    if output == 'collage.png':
+        output = images[0] + '.collage.png'
+    collage.save(output)
     
-    print('Collage is ready!')
+    print(f'Collage is ready at {output}!')
 
 
 if __name__ == '__main__':

@@ -25,6 +25,7 @@ optional arguments:
   -f FOLDER, --folder FOLDER
                         folder with images (*.jpg, *.jpeg, *.png)
   -F FILE, --file FILE  file with newline separated list of files
+  -R, --recursive       look for the images in subfolders (FALSE by default)
   -o OUTPUT, --output OUTPUT
                         output collage image filename
   -W WIDTH, --width WIDTH

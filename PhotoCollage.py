@@ -62,7 +62,7 @@ def clamp(v,l,h):
     return l if v < l else h if v > h else v
 
 # takes list of PIL image objects and returns the collage as a PIL image object
-def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), aspectratiofactor = 1.0, imageMode='RGBA'):
+def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), targetaspectratio = 1.0):
     # first downscale all images according to the minimum height of any image
 #     minHeight = min([img.height for img in imgList])
 #     if antialias:
@@ -81,8 +81,10 @@ def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), asp
     # need list of aspect ratios and number of rows (partitions)
     imgHeights = [img.height for img in imgList]
     totalWidth = sum([img.width for img in imgList])
+    totalHeight = sum([img.height for img in imgList])
     avgWidth = totalWidth / len(imgList)
-    targetWidth = avgWidth * math.sqrt(len(imgList) * aspectratiofactor)
+    avgHeight = totalHeight / len(imgList)
+    targetWidth = (avgHeight + avgWidth) / 2 * math.sqrt(len(imgList) * targetaspectratio)
     
     numRows = clamp(int(round(totalWidth / targetWidth)), 1, len(imgList))
     if numRows == 1:
@@ -114,8 +116,7 @@ def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), asp
         background += tuple([0])
     else:
         background += tuple([255])
-
-    outImg = Image.new(imageMode, (w,h), background)
+    outImg = Image.new("RGBA", (w,h), background)
     xPos,yPos = (0,0)
     
     for row in imgRows:
@@ -134,23 +135,22 @@ def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), asp
 def main():
     def rgb(s):
         try:
-            rgb = tuple(0 if v < 0 else 255 if v > 255 else v for v in map(int, s.split(',')))
+            rgb = (0 if v < 0 else 255 if v > 255 else v for v in map(int, s.split(',')))
             return rgb
         except:
             raise argparse.ArgumentTypeError('Background must be (r,g,b) --> "(0,0,0)" to "(255,255,255)"')
     parse = argparse.ArgumentParser(description='Photo collage maker')
     parse.add_argument('-f', '--folder', dest='folder', help='folder with images (*.jpg, *.jpeg, *.png)', default=False)
-    parse.add_argument('-R', '--recursive', action='store_true', dest='recursive', help='look for the images in subfolders (FALSE by default)')
     parse.add_argument('-F', '--file', dest='file', help='file with newline separated list of files', default=False)
     parse.add_argument('-o', '--output', dest='output', help='output collage image filename', default='collage.png')
-    parse.add_argument('-W', '--width', dest='width', type=int, help='resulting collage image height (mutually exclusive with --height)', default=5000)
+    parse.add_argument('-W', '--width', dest='width', type=int, help='resulting collage image width (mutually exclusive with --height)', default=5000)
     parse.add_argument('-H', '--height', dest='height', type=int, help='resulting collage image height (mutually exclusive with --width)', default=5000)
     parse.add_argument('-i', '--initheight', dest='initheight', type=int, help='resize images on input to set height', default=500)
     parse.add_argument('-s', '--shuffle', action='store_true', dest='shuffle', help='enable images shuffle')
     parse.add_argument('-g', '--gap-between-images', dest='imagegap', type=int, help='number of pixels of transparent space (if saving as png file; otherwise black or specified background color) to add between neighboring images', default=0)
     parse.add_argument('-b', '--background-color', dest='background', type=rgb, help='color (r,g,b) to use for background if spacing is added between images', default=(0,0,0))
     parse.add_argument('-c', '--count', dest='count', type=int, help='count of images to use', default=0)
-    parse.add_argument('-r', '--scale-aspect-ratio', dest='aspectratiofactor', type=float, help='aspect ratio scaling factor, multiplied by the average aspect ratio of the input images to determine the output aspect ratio', default=1.0)
+    parse.add_argument('-r', '--target-aspect-ratio', dest='targetaspectratio', type=float, help='target aspect ratio for collage', default=1.0)
     parse.add_argument('-a', '--no-antialias-when-resizing', dest='noantialias', action='store_false', help='disable antialiasing on intermediate resizing of images (runs faster but output image looks worse; final resize is always antialiased)')
     parse.add_argument('files', nargs='*')
 
@@ -172,19 +172,14 @@ def main():
                 images.append(line.strip())
     elif args.folder:
         images = []
-        if args.recursive:
-            for root, dirs, files in os.walk(args.folder):
-                for name in files:
-                    if re.findall("jpg|png|jpeg", name.split(".")[-1]):
-                        fname = os.path.join(root, name)
-                        images.append(fname)
-        else:
-            for name in os.listdir(args.folder):
+        for root, dirs, files in os.walk(args.folder):
+            for name in files:
                 if re.findall("jpg|png|jpeg", name.split(".")[-1]):
-                    fname = os.path.join(args.folder, name)
+                    fname = os.path.join(root, name)
                     images.append(fname)
-    if len(images) < 3:
-        print("Need to use 3 or more images. Try again")
+    
+    if len(images) < 2:
+        print("Need to use 2 or more images. Try again")
         return
                     
     
@@ -223,11 +218,10 @@ def main():
         else:
             pilImages.append(img)
 
-    imageMode = "RGBA" if re.search('png', args.output.split('.')[-1], re.IGNORECASE) else "RGB"    
-
+        
     print('Making collage...')
     
-    collage = makeCollage(pilImages, args.imagegap, not args.noantialias, args.background, args.aspectratiofactor, imageMode)
+    collage = makeCollage(pilImages, args.imagegap, not args.noantialias, args.background, args.targetaspectratio)
     
     if args.width > 0 and collage.width > args.width:
         collage = collage.resize((args.width, int(collage.height / collage.width * args.width)), Image.LANCZOS)

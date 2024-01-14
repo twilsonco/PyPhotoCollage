@@ -19,7 +19,7 @@ defaultArgs = {
     'width':'5000',
     'height':'5000',
     'initheight':'500',
-    'aspectratiofactor':'1.0',
+    'targetaspectratio':'1.0',
     'shuffle':'True',
     'noantialias':'True'
 }
@@ -70,7 +70,7 @@ def clamp(v,l,h):
     return l if v < l else h if v > h else v
 
 # takes list of PIL image objects and returns the collage as a PIL image object
-def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), aspectratiofactor = 1.0):
+def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), targetaspectratio = 1.0):
     # first downscale all images according to the minimum height of any image
 #     minHeight = min([img.height for img in imgList])
 #     if antialias:
@@ -89,8 +89,10 @@ def makeCollage(imgList, spacing = 0, antialias = False, background=(0,0,0), asp
     # need list of aspect ratios and number of rows (partitions)
     imgHeights = [img.height for img in imgList]
     totalWidth = sum([img.width for img in imgList])
+    totalHeight = sum([img.height for img in imgList])
     avgWidth = totalWidth / len(imgList)
-    targetWidth = avgWidth * math.sqrt(len(imgList) * aspectratiofactor)
+    avgHeight = totalHeight / len(imgList)
+    targetWidth = (avgHeight + avgWidth) / 2 * math.sqrt(len(imgList) * targetaspectratio)
     
     numRows = clamp(int(round(totalWidth / targetWidth)), 1, len(imgList))
     if numRows == 1:
@@ -146,7 +148,7 @@ def getArgs(args = None):
         args['width'] = str(max([int(args['width']), 0]) if 'width' in args else 5000)
         args['height'] = str(max([int(args['height']), 0]) if 'height' in args else 5000)
         args['initheight'] = str(max([int(args['initheight']), 0]) if 'initheight' in args else 500)
-        args['aspectratiofactor'] = str(float(clamp(float(args['aspectratiofactor']), 0.05, 20.0)) if 'aspectratiofactor' in args else 1.0)
+        args['targetaspectratio'] = str(float(clamp(float(args['targetaspectratio']), 0.001, 1000.0)) if 'targetaspectratio' in args else 1.0)
         args['shuffle'] = str(True if args['shuffle'] == 'True' else False)
         args['noantialias'] = str(True if args['noantialias'] == 'True' else False)
         
@@ -176,19 +178,19 @@ def getArgs(args = None):
                      'key':'initheight',
                      'type':'number',
                      'value':args['initheight']},
-                    {'title':'Scale collage aspect ratio**:   ',
-                     'key':'aspectratiofactor',
+                    {'title':'Collage aspect ratio:   ',
+                     'key':'targetaspectratio',
                      'type':'number',
-                     'value':args['aspectratiofactor']},
+                     'value':args['targetaspectratio']},
     #                 {'title':'Background color***:   ',
     #                  'key':'background',
     #                  'type':'text',
     #                  'value':'0,0,0'},
-                    {'title':'Disable intermediate antialiasing***:   ',
+                    {'title':'Disable intermediate antialiasing**:   ',
                      'key':'noantialias',
                      'type':'check',
                      'value':args['noantialias']}],
-                    '*lower values run faster and use less memory; **scaling mean image AR; ***final resize is always antialiased'
+                    '*lower values run faster and use less memory; **final resize is always antialiased'
                 )])
                 
     try:
@@ -196,7 +198,7 @@ def getArgs(args = None):
         args['width'] = max([int(args['width']), 0]) if 'width' in args else 5000
         args['height'] = max([int(args['height']), 0]) if 'height' in args else 5000
         args['initheight'] = max([int(args['initheight']), 0]) if 'initheight' in args else 500
-        args['aspectratiofactor'] = float(clamp(float(args['aspectratiofactor']), 0.05, 20.0)) if 'aspectratiofactor' in args else 1.0
+        args['targetaspectratio'] = float(clamp(float(args['targetaspectratio']), 0.05, 20.0)) if 'targetaspectratio' in args else 1.0
         args['shuffle'] = True if args['shuffle'] == 'True' or args['shuffle'] else False
         args['noantialias'] = True if args['noantialias'] == 'True' or args['noantialias'] else False
         userExit = 2
@@ -256,7 +258,7 @@ def main():
                 
             print('Making collage...')
             
-            collage = makeCollage([i[2] for i in imageList], spacing=args['imagegap'], antialias=not args['noantialias'], aspectratiofactor=args['aspectratiofactor'])
+            collage = makeCollage([i[2] for i in imageList], spacing=args['imagegap'], antialias=not args['noantialias'], targetaspectratio=args['targetaspectratio'])
             
             if args['width'] >= 50 and collage.width > args['width']:
                 collage = collage.resize((args['width'], int(collage.height / collage.width * args['width'])), Image.ANTIALIAS)

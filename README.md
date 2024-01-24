@@ -2,9 +2,9 @@
 
 # PyPhotoCollage
 
-Combines 3 or more images into a collage, maintaining image aspect ratios and distributing images evenly over collage rows.
+Combines 3 or more images into a collage, maintaining image aspect ratios and distributing images evenly.
 
-Dissatisfied with the iOS Shortcuts image gridding capability, I wanted a photo collage tool that can distribute images evenly amoung rows while maintain image aspect ratio.
+Dissatisfied with the Siri Shortcuts image gridding capability, I wanted a photo collage tool that can distribute images evenly. It grew into the current utility.
 
 After looking around, the idea for this tool came from [Johannes Treitz's](https://medium.com/@jtreitz) [blog post](https://medium.com/@jtreitz/the-algorithm-for-a-perfectly-balanced-photo-gallery-914c94a5d8af).
 The problem is reduced to the [partition problem](http://www8.cs.umu.se/kurser/TDBAfl/VT06/algorithms/BOOK/BOOK2/NODE45.HTM), for which I used [this SO implementation](https://stackoverflow.com/a/7942946).

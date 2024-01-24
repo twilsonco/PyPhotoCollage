@@ -37,7 +37,7 @@ Main function was modified (significantly) from [delimitry's _collage_maker_](ht
 
 ![Pythonista Share Sheet setup](img/pythonista_setup.png)
   
-# Native Siri Shortcut
+# [Native Siri Shortcut](https://routinehub.co/shortcut/17870/)
 
 * PyPhotoCollage is also implemented as a vanilla Siri Shortcut that runs on Mac/iPhone/iPad
 * Has all the same options and capabilities

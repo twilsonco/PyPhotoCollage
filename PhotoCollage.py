@@ -249,8 +249,8 @@ def makeCollage(img_list,
                 round_collage_corners_perc = 0.0,
                 show_recursion_depth = False):
     # check img_ordering and collage_type args
-    if collage_type not in ["nested", "row", "column"]:
-        raise ValueError("collage_type must be one of 'nested', 'by_row', or 'by_column'")
+    if collage_type not in ["nested", "rows", "columns"]:
+        raise ValueError("collage_type must be one of 'nested', 'rows', or 'columns'")
     
     if collage_type == "nested":
         max_recursion_depth = max(max_recursion_depth, 1)
@@ -271,7 +271,7 @@ def makeCollage(img_list,
             img_list = pool.map(resize_to_max, img_list)
     
     # for column-major collage, set the do_rotate flag to True. For nested collage, set to false for top-level call and randint(0,1) for recursive calls
-    if collage_type == "column":
+    if collage_type == "columns":
         do_rotate = True
     elif collage_type == "nested":
         do_rotate = False if recursion_depth == 0 else random.randint(0,1)
@@ -473,7 +473,7 @@ def make_arg_parser():
     parse.add_argument('-R', '--recurse-input-folder', dest='recurse', action='store_true', help='recurse into subfolders of input folder')
     parse.add_argument('-F', '--file', dest='file', help='file with newline separated list of 3 or more files', default=False)
     parse.add_argument('-o', '--output', dest='output', help='output collage image filename', default='collage.png')
-    parse.add_argument('-t', '--collage-type', dest='collage_type', help='collage type (default: nested; possible: nested, row, column)', default='nested')
+    parse.add_argument('-t', '--collage-type', dest='collage_type', help='collage type (default: nested; possible: nested, rows, columns)', default='nested')
     parse.add_argument('-O', '--order', dest='order', help='order of images (default: input_order; possible: filename, random, oldest_first, newest_first, input)', default='input_order')
     parse.add_argument('-S', '--max_collage_size', dest='max_size', type=int, help='cap the longest edge (width or height) of resulting collage', default=5000)
     parse.add_argument('-r', '--target-aspect-ratio', dest='target_aspect_ratio', type=float, help='target aspect ratio for collage', default=1.0)
@@ -599,7 +599,7 @@ def main(args_in=None):
 
 if __name__ == '__main__':
     # test args array using input folder at /Users/haiiro/Downloads/collage_in_test
-    args = ['-f', '/Users/haiiro/Downloads/collage_in_test2', '-S', '5000', '-O', 'input_order', '-t', 'nested', '-N', '2', '-g', '20', '-r', '2', '-a', '-o', '/Users/haiiro/Downloads/collage_test.png', '-m', '20', '-M', '0', '-c', '20']
-    args = ['--help']
+    args = ['-f', '/Users/haiiro/Downloads/collage_in_test2', '-S', '5000', '-O', 'input_order', '-t', 'columns', '-N', '2', '-g', '20', '-r', '2', '-a', '-o', '/Users/haiiro/Downloads/collage_test.png', '-m', '20', '-M', '0', '-c', '20']
+    # args = ['--help']
     
     main(args)  

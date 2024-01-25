@@ -252,8 +252,8 @@ def makeCollage(img_list,
                 round_collage_corners_perc = 0.0,
                 show_recursion_depth = False):
     # check img_ordering and collage_type args
-    if collage_type not in ["nested", "row", "column"]:
-        raise ValueError("collage_type must be one of 'nested', 'by_row', or 'by_column'")
+    if collage_type not in ["nested", "rows", "columns"]:
+        raise ValueError("collage_type must be one of 'nested', 'rows', or 'columns'")
     
     if collage_type == "nested":
         max_recursion_depth = max(max_recursion_depth, 1)
@@ -274,7 +274,7 @@ def makeCollage(img_list,
             img_list = pool.map(resize_to_max, img_list)
     
     # for column-major collage, set the do_rotate flag to True. For nested collage, set to false for top-level call and randint(0,1) for recursive calls
-    if collage_type == "column":
+    if collage_type == "columns":
         do_rotate = True
     elif collage_type == "nested":
         do_rotate = False if recursion_depth == 0 else random.randint(0,1)

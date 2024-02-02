@@ -6,7 +6,7 @@ Combines 3 or more images into a collage, maintaining image aspect ratios and di
 
 Dissatisfied with the Siri Shortcuts image gridding capability, I wanted a photo collage tool that can distribute images evenly. It grew into the current utility.
 
-After looking around, the idea for this tool came from [Johannes Treitz's](https://medium.com/@jtreitz) [blog post](https://medium.com/@jtreitz/the-algorithm-for-a-perfectly-balanced-photo-gallery-914c94a5d8af).
+After looking around, the idea for this tool came from Johannes Treitz's blog post (which no longer exists...).
 The problem is reduced to the [partition problem](http://www8.cs.umu.se/kurser/TDBAfl/VT06/algorithms/BOOK/BOOK2/NODE45.HTM), for which I used [this SO implementation](https://stackoverflow.com/a/7942946).
 Main function was modified (significantly) from [delimitry's _collage_maker_](https://github.com/delimitry/collage_maker).
 

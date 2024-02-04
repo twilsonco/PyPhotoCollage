@@ -634,7 +634,8 @@ def main(args_in=None):
 
 if __name__ == '__main__':
     # test args array using input folder at /Users/haiiro/Downloads/collage_in_test
-    args = ['-f', '/Users/haiiro/Downloads/collage_in_test2', '-S', '5000', '-O', 'input_order', '-t', 'columns', '-N', '2', '-g', '20', '-r', '2', '-a', '-o', '/Users/haiiro/Downloads/collage_test.png', '-m', '20', '-M', '0', '-c', '20', '-d', '45']
+    # args = ['-f', '/Users/haiiro/Downloads/collage_in_test2', '-S', '5000', '-O', 'input_order', '-t', 'columns', '-N', '2', '-g', '20', '-r', '2', '-a', '-o', '/Users/haiiro/Downloads/collage_test.png', '-m', '30', '-M', '0', '-c', '20', '-d', '10']
     # args = ['--help']
+    # main(args)
     
-    main(args)  
+    main()

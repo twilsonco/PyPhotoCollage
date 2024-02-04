@@ -239,11 +239,25 @@ def rotate_image(img, max_deg, supersample=4):
     # Create a larger image for supersampling
     large_size = (img.size[0] * supersample, img.size[1] * supersample)
     img = img.resize(large_size, Image.LANCZOS)
-    # Rotate the image
+
+    # Create the alpha mask on the larger image
+    alpha = Image.new('L', large_size, "white")
+
+    # Rotate the image and the alpha mask
     rot_angle = random.uniform(-max_deg, max_deg)
     img = img.rotate(rot_angle, expand=True)
+    alpha = alpha.rotate(rot_angle, expand=True)
+
+    if img.mode == 'RGBA':
+        # If the image has an alpha layer, combine it with the new alpha layer
+        alpha = ImageChops.multiply(alpha, img.split()[3])
+
+    # Apply the alpha mask to the image
+    img.putalpha(alpha)
+
     # Scale down the image
     img = img.resize((img.width // supersample, img.height // supersample), Image.LANCZOS)
+
     return img
 
 def resize_img_to_max_size(img, max_size, no_antialias=False):
@@ -460,6 +474,8 @@ def makeCollage(img_list,
     # then resize rows to have the same width, and combine into a single PIL image object
     row_imgs = []
     for row in img_rows:
+        if len(row) == 0:
+            continue
         row_img = Image.new("RGBA", (sum([img.width + spacing for img in row]) - spacing, row[0].height), background)
         x_pos = 0
         for img in row:

@@ -13,6 +13,7 @@ Main function was modified (significantly) from [delimitry's _collage_maker_](ht
 ![aspect ratio and image ordering](img/2.png)
 ![collage type and nesting](img/3.png)
 ![collage spacing and corner rounding](img/4.png)
+![image rotation](img/5.png)
 
 # Notes for Pythonista and Siri Shortcut versions
 

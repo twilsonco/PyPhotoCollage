@@ -215,6 +215,34 @@ def add_corners(im, corner_perc, supersample=3):
 
     return im
 
+"""
+Rotate an image by a random angle within a specified range.
+
+:param img: The image to be rotated.
+:param max_deg: The maximum angle in degrees for the rotation.
+:param supersample: (optional) The factor by which to supersample the image before rotation. Default is 4.
+
+:return: The rotated image.
+
+The function takes an image and rotates it by a random angle within the specified range. The rotation is performed by first pasting the image onto a larger image to prevent cutting off corners during rotation. The size of the larger image is calculated based on the width, height, and amount of rotation. The image is then rotated by the random angle using the 'rotate' method. Finally, the rotated image is scaled down by the supersample factor.
+
+Example usage:
+    img = Image.open('image.jpg')
+    max_deg = 45
+    supersample = 4
+    rotated_img = rotate_image(img, max_deg, supersample)
+"""
+def rotate_image(img, max_deg, supersample=4):
+    # Create a larger image for supersampling
+    large_size = (img.size[0] * supersample, img.size[1] * supersample)
+    img = img.resize(large_size, Image.LANCZOS)
+    # Rotate the image
+    rot_angle = random.uniform(-max_deg, max_deg)
+    img = img.rotate(rot_angle, expand=True)
+    # Scale down the image
+    img = img.resize((img.width // supersample, img.height // supersample), Image.LANCZOS)
+    return img
+
 def resize_img_to_max_size(img, max_size, no_antialias=False):
     if max_size > 50 and img.width > max_size:
         if no_antialias:
@@ -247,6 +275,7 @@ def makeCollage(img_list,
                 max_collage_size = 0, 
                 round_image_corners_perc = 0.0,
                 round_collage_corners_perc = 0.0,
+                rotate_images_max_deg = 0,
                 show_recursion_depth = False):
     # check img_ordering and collage_type args
     if collage_type not in ["nested", "rows", "columns"]:
@@ -269,6 +298,10 @@ def makeCollage(img_list,
             def resize_to_max(img):
                 return resize_img_to_max_size(img, max_collage_size, no_antialias)
             img_list = pool.map(resize_to_max, img_list)
+        if rotate_images_max_deg > 0:
+            def rotate_img(img):
+                return rotate_image(img, rotate_images_max_deg)
+            img_list = pool.map(rotate_img, img_list)
     
     # for column-major collage, set the do_rotate flag to True. For nested collage, set to false for top-level call and randint(0,1) for recursive calls
     if collage_type == "columns":
@@ -480,6 +513,7 @@ def make_arg_parser():
     parse.add_argument('-g', '--gap-between-images', dest='imagegap', type=int, help='number of pixels of transparent space (if saving as png file; otherwise black or specified background color) to add between neighboring images', default=0)
     parse.add_argument('-m', '--round-image-corners-perc', dest='round_image_corners_perc', type=float, help='percentage of shortest image edge to use as radius for rounding image corners (0.0 to 100.0)', default=0.0)
     parse.add_argument('-M', '--round-collage-corners-perc', dest='round_collage_corners_perc', type=float, help='percentage of shortest collage edge to use as radius for rounding collage corners (0.0 to 100.0)', default=0.0)
+    parse.add_argument('-d', '--rotate-images-max-deg', dest='rotate_images_max_deg', type=int, help='maximum ±degrees to rotate images (0 to 90)', default=0)
     parse.add_argument('-b', '--background-color', dest='background', type=rgb, help='color (r,g,b) to use for background if spacing is added between images', default=(0,0,0))
     parse.add_argument('-c', '--count', dest='count', type=int, help='count of images to use, if fewer are desired than those specified or contained in the specified folder', default=0)
     parse.add_argument('-a', '--no-no_antialias-when-resizing', dest='noantialias', action='store_false', help='for performance, disable antialiasing on intermediate resizing of images (runs faster but output image looks worse; final resize is always antialiased)')
@@ -582,6 +616,7 @@ def main(args_in=None):
                           max_collage_size=args.max_size, 
                           round_image_corners_perc=args.round_image_corners_perc, 
                           round_collage_corners_perc=args.round_collage_corners_perc,
+                          rotate_images_max_deg=args.rotate_images_max_deg,
                           show_recursion_depth=args.show_recursion_depth)
     
     collage = resize_img_to_max_size(collage, args.max_size)
@@ -599,7 +634,7 @@ def main(args_in=None):
 
 if __name__ == '__main__':
     # test args array using input folder at /Users/haiiro/Downloads/collage_in_test
-    args = ['-f', '/Users/haiiro/Downloads/collage_in_test2', '-S', '5000', '-O', 'input_order', '-t', 'columns', '-N', '2', '-g', '20', '-r', '2', '-a', '-o', '/Users/haiiro/Downloads/collage_test.png', '-m', '20', '-M', '0', '-c', '20']
+    args = ['-f', '/Users/haiiro/Downloads/collage_in_test2', '-S', '5000', '-O', 'input_order', '-t', 'columns', '-N', '2', '-g', '20', '-r', '2', '-a', '-o', '/Users/haiiro/Downloads/collage_test.png', '-m', '20', '-M', '0', '-c', '20', '-d', '45']
     # args = ['--help']
     
     main(args)  

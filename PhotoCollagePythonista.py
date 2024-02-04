@@ -218,6 +218,34 @@ def add_corners(im, corner_perc, supersample=3):
 
     return im
 
+"""
+Rotate an image by a random angle within a specified range.
+
+:param img: The image to be rotated.
+:param max_deg: The maximum angle in degrees for the rotation.
+:param supersample: (optional) The factor by which to supersample the image before rotation. Default is 4.
+
+:return: The rotated image.
+
+The function takes an image and rotates it by a random angle within the specified range. The rotation is performed by first pasting the image onto a larger image to prevent cutting off corners during rotation. The size of the larger image is calculated based on the width, height, and amount of rotation. The image is then rotated by the random angle using the 'rotate' method. Finally, the rotated image is scaled down by the supersample factor.
+
+Example usage:
+    img = Image.open('image.jpg')
+    max_deg = 45
+    supersample = 4
+    rotated_img = rotate_image(img, max_deg, supersample)
+"""
+def rotate_image(img, max_deg, supersample=4):
+    # Create a larger image for supersampling
+    large_size = (img.size[0] * supersample, img.size[1] * supersample)
+    img = img.resize(large_size, Image.LANCZOS)
+    # Rotate the image
+    rot_angle = random.uniform(-max_deg, max_deg)
+    img = img.rotate(rot_angle, expand=True)
+    # Scale down the image
+    img = img.resize((img.width // supersample, img.height // supersample), Image.LANCZOS)
+    return img
+
 def resize_img_to_max_size(img, max_size, no_antialias=False):
     if max_size > 50 and img.width > max_size:
         if no_antialias:
@@ -250,6 +278,7 @@ def makeCollage(img_list,
                 max_collage_size = 0, 
                 round_image_corners_perc = 0.0,
                 round_collage_corners_perc = 0.0,
+                rotate_images_max_deg = 0,
                 show_recursion_depth = False):
     # check img_ordering and collage_type args
     if collage_type not in ["nested", "rows", "columns"]:
@@ -272,6 +301,11 @@ def makeCollage(img_list,
             def resize_to_max(img):
                 return resize_img_to_max_size(img, max_collage_size, no_antialias)
             img_list = pool.map(resize_to_max, img_list)
+        # rotate images randomly within ±rotate_images_max_deg if requested
+        if rotate_images_max_deg > 0:
+            def rotate_img(img):
+                return rotate_image(img, rotate_images_max_deg)
+            img_list = pool.map(rotate_img, img_list)
     
     # for column-major collage, set the do_rotate flag to True. For nested collage, set to false for top-level call and randint(0,1) for recursive calls
     if collage_type == "columns":
@@ -518,6 +552,15 @@ def get_user_options(args = None):
             'max': 100,
             'type': int,
             'unit': "%"
+        },{
+            'name': "Rotate images",
+            'description': "Rotate images randomly within this value",
+            'icon': "⟲",
+            'value': 0,
+            'min': 0,
+            'max': 90,
+            'type': int,
+            'unit': " deg"
         },{
             'name': "Image count",
             'description': "The maximum number of images in the collage, useful for when an entire album is selected",
@@ -891,6 +934,7 @@ def main():
                                   max_collage_size=args['Collage max width/height'],
                                   round_image_corners_perc=args['Round image corners'],
                                   round_collage_corners_perc=args['Round collage corners'],
+                                  rotate_images_max_deg=args['Rotate images'],
                                   show_recursion_depth=args['Show nesting level'])
             
             collage = resize_img_to_max_size(collage, args['Collage max width/height'])

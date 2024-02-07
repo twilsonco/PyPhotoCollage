@@ -524,7 +524,7 @@ def make_arg_parser():
     parse.add_argument('-o', '--output', dest='output', help='output collage image filename', default='collage.png')
     parse.add_argument('-t', '--collage-type', dest='collage_type', help='collage type (default: nested; possible: nested, rows, columns)', default='nested')
     parse.add_argument('-O', '--order', dest='order', help='order of images (default: input_order; possible: filename, random, oldest_first, newest_first, input)', default='input_order')
-    parse.add_argument('-S', '--max_collage_size', dest='max_size', type=int, help='cap the longest edge (width or height) of resulting collage', default=5000)
+    parse.add_argument('-S', '--max-collage-size', dest='max_size', type=int, help='cap the longest edge (width or height) of resulting collage', default=5000)
     parse.add_argument('-r', '--target-aspect-ratio', dest='target_aspect_ratio', type=float, help='target aspect ratio for collage', default=1.0)
     parse.add_argument('-g', '--gap-between-images', dest='imagegap', type=int, help='number of pixels of transparent space (if saving as png file; otherwise black or specified background color) to add between neighboring images', default=0)
     parse.add_argument('-m', '--round-image-corners-perc', dest='round_image_corners_perc', type=float, help='percentage of shortest image edge to use as radius for rounding image corners (0.0 to 100.0)', default=0.0)

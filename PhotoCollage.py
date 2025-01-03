@@ -513,7 +513,7 @@ def makeCollage(img_list,
 def make_arg_parser():
     def rgb(s):
         try:
-            rgb = (0 if v < 0 else 255 if v > 255 else v for v in map(int, s.split(',')))
+            rgb = tuple(0 if v < 0 else 255 if v > 255 else v for v in map(int, s.split(',')))
             return rgb
         except:
             raise argparse.ArgumentTypeError('Background must be (r,g,b) --> "(0,0,0)" to "(255,255,255)"')

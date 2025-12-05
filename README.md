@@ -95,7 +95,7 @@ options:
   -a, --no-no_antialias-when-resizing
                         for performance, disable antialiasing on intermediate resizing of images (runs faster but output image looks worse; final resize is always antialiased)
   -i INIT_SIZE, --init-image-size INIT_SIZE
-                        to derease necessary memory, resize images on input to set longest edge length
+                        to decrease necessary memory, resize images on input to set longest edge length
   -N MAX_RECURSION_DEPTH, --max-nested-collage-depth MAX_RECURSION_DEPTH
                         maximum number of levels of nesting. The more levels there are, the larger the size difference will be between the smallest and largest images in the
                         resulting collage (default: 2)

@@ -92,7 +92,7 @@ options:
                         color (r,g,b) to use for background if spacing is added between images
   -c COUNT, --count COUNT
                         count of images to use, if fewer are desired than those specified or contained in the specified folder
-  -a, --no-no_antialias-when-resizing
+  -a, --no-antialias-when-resizing
                         for performance, disable antialiasing on intermediate resizing of images (runs faster but output image looks worse; final resize is always antialiased)
   -i INIT_SIZE, --init-image-size INIT_SIZE
                         to decrease necessary memory, resize images on input to set longest edge length

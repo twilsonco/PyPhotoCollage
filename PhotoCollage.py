@@ -532,7 +532,7 @@ def make_arg_parser():
     parse.add_argument('-d', '--rotate-images-max-deg', dest='rotate_images_max_deg', type=int, help='maximum ±degrees to rotate images (0 to 90)', default=0)
     parse.add_argument('-b', '--background-color', dest='background', type=rgb, help='color (r,g,b) to use for background if spacing is added between images', default=(0,0,0))
     parse.add_argument('-c', '--count', dest='count', type=int, help='count of images to use, if fewer are desired than those specified or contained in the specified folder', default=0)
-    parse.add_argument('-a', '--no-no_antialias-when-resizing', dest='noantialias', action='store_false', help='for performance, disable antialiasing on intermediate resizing of images (runs faster but output image looks worse; final resize is always antialiased)')
+    parse.add_argument('-a', '--no-antialias-when-resizing', dest='noantialias', action='store_false', help='for performance, disable antialiasing on intermediate resizing of images (runs faster but output image looks worse; final resize is always antialiased)')
     parse.add_argument('-i', '--init-image-size', dest='init_size', type=int, help='to decrease necessary memory, resize images on input to set longest edge length', default=1000)
     parse.add_argument('-N', '--max-nested-collage-depth', dest='max_recursion_depth', type=int, help='maximum number of levels of nesting. The more levels there are, the larger the size difference will be between the smallest and largest images in the resulting collage (default: 2)', default=2)
     parse.add_argument('-s', '--show-recursion-depth', dest='show_recursion_depth', action='store_true', help='show recursion depth by adding border to images')
